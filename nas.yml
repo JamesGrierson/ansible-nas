@@ -188,6 +188,21 @@
     - role: homeassistant
       tags:
         - homeassistant
+      vars:
+        homeassistant_container_name: "home_assistant"
+        homeassistant_data_directory: "{{ docker_home }}/homeassistant"
+        homeassistant_http_port: 8123
+        hacs_install: true
+
+    - role: homeassistant
+      tags:
+        - homeassistant
+        - homeassistant_test
+      vars:
+        homeassistant_container_name: "home_assistant_test"
+        homeassistant_data_directory: "{{ docker_home }}/homeassistant_test"
+        homeassistant_http_port: 8124
+        hacs_install: true
 
     - role: homebridge
       tags:

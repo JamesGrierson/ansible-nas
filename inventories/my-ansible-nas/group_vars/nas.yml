@@ -18,6 +18,8 @@ heimdall_enabled: true
 portainer_enabled: true
 plex_enabled: true
 homeassistant_enabled: true
+homeassistant_test_enabled: true
+hacs_install: true
 esphome_enabled: true
 
 

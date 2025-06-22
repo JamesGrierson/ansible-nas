@@ -15,7 +15,8 @@
         pull: true
         volumes:
           - "{{ homeassistant_data_directory }}/config:/config:rw"
-        network_mode: host
+        ports:
+          - "{{ homeassistant_http_port }}:8123"
         restart_policy: unless-stopped
         env:
           TZ: "{{ ansible_nas_timezone }}"
@@ -27,6 +28,11 @@
           traefik.http.routers.homeassistant.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
           traefik.http.services.homeassistant.loadbalancer.server.port: "8123"
         memory: "{{ homeassistant_memory }}"
+
+    - name: Install HACS if enabled
+      import_tasks: install_hacs.yml
+      when: hacs_install | default(false)
+
   when: homeassistant_enabled is true
 
 - name: Stop homeassistant

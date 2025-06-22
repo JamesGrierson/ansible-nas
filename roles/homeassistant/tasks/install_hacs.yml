@@ -1,0 +1,21 @@
+---
+- name: Wait for Home Assistant container to be running
+  community.docker.docker_container_info:
+    name: "{{ homeassistant_container_name }}"
+  register: ha_container_info
+  retries: 5
+  delay: 3
+  until: ha_container_info.container.State.Running
+  when: hacs_install | default(false)
+
+- name: Install HACS in Home Assistant container
+  ansible.builtin.command: >
+    docker exec {{ homeassistant_container_name }} bash -c "wget -O - https://get.hacs.xyz | bash -"
+  when: hacs_install | default(false)
+
+- name: Restart Home Assistant to activate HACS
+  community.docker.docker_container:
+    name: "{{ homeassistant_container_name }}"
+    restart: true
+  # become: true
+  when: hacs_install | default(false)
